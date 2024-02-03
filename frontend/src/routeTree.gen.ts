@@ -11,8 +11,8 @@ import { Route as AuthSignupImport } from './routes/_auth/signup'
 
 // Create Virtual Routes
 
-const BrowseIndexLazyImport = createFileRoute('/src/routeTree/gen')()
-const BrowseAboutLazyImport = createFileRoute('/src/routeTree/gen')()
+const BrowseIndexLazyImport = createFileRoute('/_browse/')()
+const BrowseAboutLazyImport = createFileRoute('/_browse/about')()
 
 // Create/Update Routes
 

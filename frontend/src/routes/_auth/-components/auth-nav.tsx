@@ -1,11 +1,12 @@
-import { BaseContainer } from "@/components/containers/base-container";
-import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import { Logo } from "./logo";
+
+import { BaseContainer } from "@/components/containers";
+import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
 
 export const AuthNav = () => {
     return (
-        <header className="p-3 pt-3 shadow-sm dark:border-slate-800 fixed top-0 left-0 z-10 w-screen">
+        <header className="fixed left-0 top-0 z-10 w-screen p-3 pt-3 shadow-sm">
             <BaseContainer>
                 <div className="flex flex-row items-center justify-between">
                     <Logo />

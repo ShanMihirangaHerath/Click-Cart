@@ -1,8 +1,10 @@
-import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
-import video from "@/assets/Videos/signin.mp4";
-import { AuthNav } from "@/components/nev";
-import { useTheme } from "@/components/theme-provider";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+
+import { useTheme } from "@/components/theme-provider";
+import { AuthNav } from "./_auth/-components/auth-nav";
+
+import video from "@/assets/Videos/signin.mp4";
 
 export const Route = createFileRoute("/_auth")({
     component: AuthLayout,
@@ -13,6 +15,7 @@ function AuthLayout() {
     useEffect(() => {
         setTheme("dark");
     }, []);
+
     return (
         <>
             <AuthNav />
@@ -35,7 +38,8 @@ function AuthLayout() {
                 </p>
             </div>
             <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 p-4 md:left-2/3 md:-translate-x-1/3 ">
-                <div className="relative">
+                {/* <div className="relative h-[650px] w-[400px] lg:w-[450px]"> */}
+                <div className="relative h-[500px] w-[90vw] md:w-[40vw]">
                     <Outlet />
                 </div>
             </div>
