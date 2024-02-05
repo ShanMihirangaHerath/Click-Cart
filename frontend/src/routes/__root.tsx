@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import React, { Suspense } from "react";
+import { Toaster } from "sonner";
 
 const TanStackRouterDevtools =
     process.env.NODE_ENV === "production"
@@ -18,8 +19,9 @@ export const Route = createRootRoute({
     component: () => (
         <>
             <QueryClientProvider client={queryClient}>
+                <Toaster richColors position="bottom-center" />
                 <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-                    <Outlet/>
+                    <Outlet />
                 </ThemeProvider>
                 <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>

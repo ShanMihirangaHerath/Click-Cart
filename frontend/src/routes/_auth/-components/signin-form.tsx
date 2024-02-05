@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,30 +19,26 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SignupData, SignupSchema } from "@/schemas/signup-schema";
-import { useSignup } from "@/services/auth";
 
-export const SignupForm = () => {
+const SigninSchema = z
+    .object({
+        email: z.string().min(1, {message: "Please Enter Your Email"}).email().max(255),
+        password: z.string().min(8).max(50),
+    })
+   
+
+type SigninData = z.infer<typeof SigninSchema>;
+
+export const SigninForm = () => {
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate({ from: "/signup" });
-    const { mutate, isPending, status } = useSignup();
 
-    const form = useForm<SignupData>({
-        resolver: zodResolver(SignupSchema),
+    const form = useForm<SigninData>({
+        resolver: zodResolver(SigninSchema),
         defaultValues: {
-            firstName: "",
-            lastName: "",
             email: "",
             password: "",
-            confirmPassword: "",
         },
     });
-
-    useEffect(() => {
-        if (status === "success") {
-            navigate({ to: "/signin" });
-        }
-    }, [status]);
 
     const errors = form["formState"]["errors"];
 
@@ -50,10 +46,12 @@ export const SignupForm = () => {
         if (Object.keys(errors).length > 0) {
             setOpen(true);
         }
+
+        return () => {};
     }, [errors]);
 
-    function onSubmit(values: SignupData) {
-        mutate(values);
+    function onSubmit(values: SigninData) {
+        console.log(values);
     }
 
     return (
@@ -65,39 +63,12 @@ export const SignupForm = () => {
                 >
                     <FormField
                         control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>First Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Please enter your first name"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Last Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Please enter your last name"
-                                        {...field}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
                         name="email"
                         render={({ field }) => (
                             <FormItem>
+                                <h3 className="left-5 top-1 -translate-x-1 -translate-y-9 scroll-m-1 text-2xl font-semibold tracking-tight">
+                                    Welcome Back!
+                                </h3>
                                 <FormLabel>Email Address</FormLabel>
                                 <FormControl>
                                     <Input
@@ -125,23 +96,9 @@ export const SignupForm = () => {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Retype password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Retype your password"
-                                        {...field}
-                                        type="password"
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">
+                        Log In
+                    </Button>
                 </form>
             </Form>
 
@@ -155,20 +112,11 @@ export const SignupForm = () => {
                         <DialogDescription className="space-y-2">
                             {Object.entries(errors).map(([key, value]) => (
                                 <>
-                                    {key === "firstName" && (
-                                        <span>First Name: </span>
-                                    )}
-                                    {key === "lastName" && (
-                                        <span>Last Name: </span>
-                                    )}
                                     {key === "email" && (
                                         <span>Email Address: </span>
                                     )}
                                     {key === "password" && (
                                         <span>Password: </span>
-                                    )}
-                                    {key === "confirmPassword" && (
-                                        <span>Confirm Password: </span>
                                     )}
                                     <span key={key}>{value.message}</span>
                                     <br />
