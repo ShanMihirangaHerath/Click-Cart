@@ -2,8 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
-
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -21,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignupData, SignupSchema } from "@/schemas/signup-schema";
 import { useSignup } from "@/services/auth";
+import { LoadingButton } from "@/components/loading-button";
 
 export const SignupForm = () => {
     const [open, setOpen] = useState(false);
@@ -40,7 +39,7 @@ export const SignupForm = () => {
 
     useEffect(() => {
         if (status === "success") {
-            navigate({ to: "/signin" });
+            navigate({ to: "../" });
         }
     }, [status]);
 
@@ -141,7 +140,9 @@ export const SignupForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <LoadingButton loading={isPending} type="submit">
+                        Submit
+                    </LoadingButton>
                 </form>
             </Form>
 

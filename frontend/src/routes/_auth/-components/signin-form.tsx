@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/loading-button";
+
 import {
     Dialog,
     DialogContent,
@@ -19,17 +19,14 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-const SigninSchema = z
-    .object({
-        email: z.string().min(1, {message: "Please Enter Your Email"}).email().max(255),
-        password: z.string().min(8).max(50),
-    })
-   
-
-type SigninData = z.infer<typeof SigninSchema>;
+import { SigninData, SigninSchema } from "@/schemas/signin-schema";
+import { useSignin } from "@/services/auth/use-signin";
+import { useNavigate } from "@tanstack/react-router";
+import { Switch } from "@/components/ui/switch";
 
 export const SigninForm = () => {
+    const { mutate, isPending, status } = useSignin();
+    const navigate = useNavigate({ from: "/signin" });
     const [open, setOpen] = useState(false);
 
     const form = useForm<SigninData>({
@@ -43,6 +40,12 @@ export const SigninForm = () => {
     const errors = form["formState"]["errors"];
 
     useEffect(() => {
+        if (status === "success") {
+            navigate({ to: "../" });
+        }
+    }, [status]);
+
+    useEffect(() => {
         if (Object.keys(errors).length > 0) {
             setOpen(true);
         }
@@ -51,7 +54,7 @@ export const SigninForm = () => {
     }, [errors]);
 
     function onSubmit(values: SigninData) {
-        console.log(values);
+        mutate(values);
     }
 
     return (
@@ -96,9 +99,26 @@ export const SigninForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">
+                    <FormField
+                        control={form.control}
+                        name="remember"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                <div className="space-y-0.5">
+                                    <FormLabel>Remember Me</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <LoadingButton loading={isPending} type="submit">
                         Log In
-                    </Button>
+                    </LoadingButton>
                 </form>
             </Form>
 
