@@ -19,68 +19,65 @@ return new class extends Migration
 
         Schema::create('product_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 100);
         });
 
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name' , 230);
-            $table->string('slug')->unique();
-            $table->string('description');
-            $table->boolean('featured')->default(false);
-            $table->integer('status');
-            $table->timestamps();
-            $table->foreignId('product_type_id')->constrained('product_types');
+            $table->string('name', 150);
+            $table->string('slug', 150)->unique();
+            $table->text('description');
+            $table->timestampS();
+            $table->foreignId('product_types')->constrained();
         });
 
-        Schema::create('peoduct_has_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained('products');
-            $table->foreignId('category_id')->constrained('categories');
+        Schema::create('category_products', function (Blueprint $table) {
+            $table->foreignId('category_id')->constrained();
+            $table->foreignId('product_id')->constrained();
         });
 
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150);
-            $table->string('sku', 25)->unique();
+            $table->string('public_id', 25)->unique();
             $table->integer('quantity');
-            $table->integer('status');
             $table->double('price', 8, 2);
+            $table->integer('status');
+            $table->boolean('is_default');
             $table->timestamps();
+            $table->foreignId('product_id')->constrained();
+
+            $table->index(['product_id']);
         });
 
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->string('url');
-            $table->text('alt_text');
-            $table->boolean('featured')->default(false);
-            $table->foreignId('product_id')->nullable()->constrained('products');
-            $table->foreignId('inventory_id')->nullable()->constrained('inventories');
+            $table->string('alt_text', 100);
+            $table->boolean('featured');
+            $table->morphs('imageable');
         });
 
-        Schema::create('attributes', function (Blueprint $table) {
+        Schema::create('attriibutes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-        });
-        
-        Schema::create('product_type_has_attributes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_type_id')->constrained('product_types');
-            $table->foreignId('attribute_id')->constrained('attributes');
+            $table->string('name');
+            $table->string('note', 255);
+            $table->foreignId('product_type_id')->constrained();
         });
 
         Schema::create('attribute_values', function (Blueprint $table) {
             $table->id();
             $table->string('value');
-            $table->foreignId('attribute_id')->constrained('attributes');
         });
 
-        Schema::create('inventory_has_attribute_values', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('inventory_id')->constrained('inventories');
-            $table->foreignId('attribute_value_id')->constrained('attribute_values');
+        Schema::create('attribute_attribute_value', function (Blueprint $table) {
+            $table->foreignId('attribute_value_id')->constrained();
+            $table->foreignId('category_id')->constrained();
         });
 
+        Schema::create('inventory_attribute_value', function (Blueprint $table) {
+            $table->foreignId('inventory_id')->constrained();
+            $table->foreignId('attribute_value_id')->constrained();
+        });
     }
 
     /**
@@ -88,14 +85,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventory_has_attribute_values');
+        Schema::dropIfExists('inventory_attribute_value');
+        Schema::dropIfExists('attribute_attribute_value');
         Schema::dropIfExists('attribute_values');
-        Schema::dropIfExists('product_type_has_attributes');
-        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('attriibutes');
         Schema::dropIfExists('product_images');
         Schema::dropIfExists('inventories');
-        Schema::dropIfExists('peoduct_has_categories');
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('category_products');
+        Schema::dropIfExists('products'); 
         Schema::dropIfExists('product_types');
         Schema::dropIfExists('categories');
     }
