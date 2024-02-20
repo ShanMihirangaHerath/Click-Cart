@@ -28,7 +28,11 @@ return new class extends Migration
             $table->string('slug', 150)->unique();
             $table->text('description');
             $table->timestampS();
-            $table->foreignId('product_types')->constrained();
+            $table->foreignId('product_type_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+
+            $table->index('product_type_id');
+            $table->index('user_id');
         });
 
         Schema::create('category_products', function (Blueprint $table) {
@@ -57,7 +61,7 @@ return new class extends Migration
             $table->morphs('imageable');
         });
 
-        Schema::create('attriibutes', function (Blueprint $table) {
+        Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('note', 255);
@@ -71,7 +75,7 @@ return new class extends Migration
 
         Schema::create('attribute_attribute_value', function (Blueprint $table) {
             $table->foreignId('attribute_value_id')->constrained();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('attribute_id')->constrained();
         });
 
         Schema::create('inventory_attribute_value', function (Blueprint $table) {

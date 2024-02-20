@@ -7,6 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as BrowseImport } from './routes/_browse'
 import { Route as AuthImport } from './routes/_auth'
+import { Route as DashboardDashboardImport } from './routes/-dashboard/dashboard'
 import { Route as AuthSignupImport } from './routes/_auth/signup'
 import { Route as AuthSigninImport } from './routes/_auth/signin'
 
@@ -36,6 +37,11 @@ const BrowseAboutLazyRoute = BrowseAboutLazyImport.update({
   path: '/about',
   getParentRoute: () => BrowseRoute,
 } as any).lazy(() => import('./routes/_browse/about.lazy').then((d) => d.Route))
+
+const DashboardDashboardRoute = DashboardDashboardImport.update({
+  id: '/_dashboard/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
   path: '/signup',
@@ -67,6 +73,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthImport
     }
+    '/_dashboard/dashboard': {
+      preLoaderRoute: typeof DashboardDashboardImport
+      parentRoute: typeof rootRoute
+    }
     '/_browse/about': {
       preLoaderRoute: typeof BrowseAboutLazyImport
       parentRoute: typeof BrowseImport
@@ -83,4 +93,5 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([AuthSigninRoute, AuthSignupRoute]),
   BrowseRoute.addChildren([BrowseAboutLazyRoute, BrowseIndexLazyRoute]),
+  DashboardDashboardRoute,
 ])

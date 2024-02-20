@@ -2,7 +2,6 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 import { useTheme } from "@/components/theme-provider";
-import { AuthNav } from "./_auth/-components/auth-nav";
 
 import video from "@/assets/Videos/signin.mp4";
 
@@ -18,7 +17,6 @@ function AuthLayout() {
 
     return (
         <>
-            <AuthNav />
             <div className="relative">
                 <video
                     src={video}

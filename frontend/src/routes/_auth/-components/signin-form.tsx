@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SigninData, SigninSchema } from "@/schemas/signin-schema";
 import { useSignin } from "@/services/auth/use-signin";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Switch } from "@/components/ui/switch";
 
 export const SigninForm = () => {
@@ -119,8 +119,13 @@ export const SigninForm = () => {
                     <LoadingButton loading={isPending} type="submit">
                         Log In
                     </LoadingButton>
+                    <Link to="/signup">
+                        <div className="absolute text-sm font-medium text-gray-500 hover:text-red-600 mt-[50px] md:mt-[50px]">
+                            Create An Account
+                        </div>
+                    </Link>
                 </form>
-            </Form>
+            </Form> 
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>

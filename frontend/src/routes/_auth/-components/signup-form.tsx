@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
     Dialog,
     DialogContent,
@@ -143,6 +143,11 @@ export const SignupForm = () => {
                     <LoadingButton loading={isPending} type="submit">
                         Submit
                     </LoadingButton>
+                    <Link to="/signup">
+                        <div className="absolute text-sm font-medium text-gray-500 hover:text-red-600 top-[450px] left-80">
+                            If you already have an account?
+                        </div>
+                    </Link>
                 </form>
             </Form>
 

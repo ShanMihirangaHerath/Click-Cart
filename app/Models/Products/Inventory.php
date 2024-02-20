@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Products;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Inventory extends Model
@@ -34,6 +33,7 @@ class Inventory extends Model
 
     public function attributeValues(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeValue::class);
+        // return $this->belongsToMany(AttributeValue::class);
+        return $this->belongsToMany(AttributeValue::class, 'inventory_attribute_value');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Products;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +11,13 @@ class Attribute extends Model
 {
     use HasFactory;
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    
     protected $fillable = [
         'name',
         'note'
@@ -21,7 +28,7 @@ class Attribute extends Model
         return $this->belongsToMany(AttributeValue::class);
     }
 
-    public function productTypes(): BelongsTo
+    public function productType(): BelongsTo
     {
         return $this->belongsTo(ProductType::class);
     }
