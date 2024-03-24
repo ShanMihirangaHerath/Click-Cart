@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests\Products;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreProductRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'type_id' => 'required|exists:product_types,id',
+            'inventories.*.quantity' => 'required|integer',
+            'inventories.*.unit_price' => 'required|numeric',
+        ];
+    }
+}

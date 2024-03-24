@@ -143,7 +143,7 @@ export const SignupForm = () => {
                     <LoadingButton loading={isPending} type="submit">
                         Submit
                     </LoadingButton>
-                    <Link to="/signup">
+                    <Link to="/signin">
                         <div className="absolute text-sm font-medium text-gray-500 hover:text-red-600 top-[450px] left-80">
                             If you already have an account?
                         </div>
